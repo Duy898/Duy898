@@ -1,0 +1,67 @@
+
+import pygame
+import sys
+import random
+
+# Khởi tạo pygame
+pygame.init()
+
+# Kích thước màn hình
+SCREEN_WIDTH = 400
+SCREEN_HEIGHT = 600
+SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+pygame.display.set_caption("Flappy Bird")
+
+# Màu sắc
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+BLUE = (135, 206, 250)
+GREEN = (0, 255, 0)
+
+# Tải font chữ
+FONT = pygame.font.SysFont("Arial", 24)
+
+# Tốc độ khung hình
+FPS = 60
+clock = pygame.time.Clock()
+
+# Tạo nhân vật chính
+class Bird:
+    def __init__(self):
+        self.x = 50
+        self.y = SCREEN_HEIGHT // 2
+        self.width = 30
+        self.height = 30
+        self.gravity = 0.5
+        self.velocity = 0
+        self.lift = -10
+
+    def draw(self):
+        pygame.draw.rect(SCREEN, BLACK, (self.x, self.y, self.width, self.height))
+
+    def update(self):
+        self.velocity += self.gravity
+        self.y += self.velocity
+
+        # Giới hạn rơi xuống đất hoặc bay lên trên
+        if self.y > SCREEN_HEIGHT - self.height:
+            self.y = SCREEN_HEIGHT - self.height
+            self.velocity = 0
+        elif self.y < 0:
+            self.y = 0
+            self.velocity = 0
+
+    def jump(self):
+        self.velocity = self.lift
+
+# Tạo các ống (pipe)
+class Pipe:
+    def __init__(self):
+        self.x = SCREEN_WIDTH
+        self.width = 50
+        self.gap = 150
+        self.top = random.randint(100, SCREEN_HEIGHT - 200)
+        self.speed = 3
+
+    def draw(self):
+        pygame.draw.rect(SCREEN, GREEN, (self
